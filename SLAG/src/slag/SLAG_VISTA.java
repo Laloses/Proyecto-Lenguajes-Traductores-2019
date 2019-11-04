@@ -93,6 +93,7 @@ public class SLAG_VISTA extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTextPane2);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setAutoscrolls(true);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -264,6 +265,7 @@ public class SLAG_VISTA extends javax.swing.JFrame {
         
         g.drawString("Arreglos:", 10, 100+(indicepintura*20));
         for(VariableConstanteArreglo elemento: tab.a){
+            indicepintura *= 2.5;
             if(elemento.tipo==TablaVariablesConstantes.almacenaarray){
                 
                 if(elemento.tipovalor==TablaVariablesConstantes.tipoentero){
@@ -276,26 +278,28 @@ public class SLAG_VISTA extends javax.swing.JFrame {
                         
                         if(j == elemento.indiceCambio){
                             drawImage.setColor(Color.red);
-                            drawImage.fillRect(desplazamiento, 205, 50, 50);
+                            drawImage.fillRect(desplazamiento, 150+indicepintura, 50, 50);
                             
                             drawImage.setColor(Color.black);
-                            drawImage.drawRect(desplazamiento, 205, 50, 50);
+                            drawImage.drawRect(desplazamiento, 150+indicepintura, 50, 50);
                             
                             drawImage.setColor(Color.white);
-                            drawImage.drawString(Integer.toString(cons.get(j)), desplazamiento+20, 240);
+                            drawImage.drawString(Integer.toString(cons.get(j)), desplazamiento+20, 170+indicepintura);
                         }
                         else{
                             drawImage.setColor(Color.white);
-                            drawImage.fillRect(desplazamiento, 205, 50, 50);
+                            drawImage.fillRect(desplazamiento, 150+indicepintura, 50, 50);
                             
                             drawImage.setColor(Color.black);
-                            drawImage.drawRect(desplazamiento, 205, 50, 50);
-                            drawImage.drawString(Integer.toString(cons.get(j)), desplazamiento+20, 240);
+                            drawImage.drawRect(desplazamiento, 150+indicepintura, 50, 50);
+                            drawImage.drawString(Integer.toString(cons.get(j)), desplazamiento+20, 170+indicepintura);
                         }
                         
                         desplazamiento+=50;
                     }
-                    g.drawString(impresion, 10, 120+(indicepintura*20));
+                    g.setColor(Color.black);
+                    g.drawString(impresion, 10, 150+(indicepintura));
+                    
                     
                 }else{
                     ArregloCaracter cons=(ArregloCaracter)elemento;
