@@ -5,10 +5,12 @@ CONSTANTES
     ARREGLOS
         DATOS={3,2,1,0}
         DATOS_2={0,0}
+        DATOS_3={'a','b','c','d','e'}
 INICIO
      SI (DATOS.LENGTH >1) ENTONCES
         x=DATOS.LENGTH-1;
         y=DATOS_2.LENGTH-1;
+        z=DATOS_3.LENGTH;
         d=1;
         PARA var=0 HASTA x PASO +1 HACER
             ESCRIBE(DATOS[var]);
@@ -21,6 +23,12 @@ INICIO
           	  ESCRIBE(DATOS_2[var2]);
          	   DATOS_2[var2]=var2+1;
 	
-           FIN
+           	FIN
+
+	PARA var2=0 HASTA z PASO +1 HACER
+          	  ESCRIBE(DATOS_3[var2]);
+         	   DATOS_3[var2]='x';
+	
+           	FIN
      FIN
 FIN
