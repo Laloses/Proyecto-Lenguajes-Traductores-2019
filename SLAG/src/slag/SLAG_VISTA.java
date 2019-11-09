@@ -286,8 +286,16 @@ public class SLAG_VISTA extends javax.swing.JFrame {
         
         g.drawString("Arreglos:", 10, titulo+indicepintura);
         indicepintura+=titulo+15;
-        
+        String impresion2 ="prueba..."; ///nueva linea
         for(VariableConstanteArreglo elemento: tab.a){
+
+            if(elemento.tipo==TablaVariablesConstantes.almacenavari){ ///nueva linea
+                if(elemento.tipovalor==TablaVariablesConstantes.tipoentero){///nueva linea
+                    VariableEntera cons2=(VariableEntera)elemento;///nueva linea
+                    impresion2 = " "+cons2.id+" : "+cons2.get();///nueva linea
+                ///nueva linea
+            }///nueva linea
+            
             if(elemento.tipo==TablaVariablesConstantes.almacenaarray){
                 
                 if(elemento.tipovalor==TablaVariablesConstantes.tipoentero){
@@ -298,6 +306,8 @@ public class SLAG_VISTA extends javax.swing.JFrame {
                     g.setColor(Color.black);
                     g.drawString(impresion, 10, indicepintura+10);
                     indicepintura+=15;
+                    g.drawString(impresion2, 10, indicepintura +10 );///nueva linea
+                    indicepintura+=15;///nueva linea
                     
                     int desplazamiento=10;
                     for(int j=0;j<cons.size();j++){
