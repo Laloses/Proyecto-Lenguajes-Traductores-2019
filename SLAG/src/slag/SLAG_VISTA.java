@@ -217,7 +217,6 @@ public class SLAG_VISTA extends javax.swing.JFrame {
         int indicepintura=0;
         int tamCons=0;
         int tamVar=0;
-        int tamArr=0;
         int titulo=20;
         
         g.setFont(new Font("Agency FB", Font.BOLD, 14));
@@ -228,19 +227,7 @@ public class SLAG_VISTA extends javax.swing.JFrame {
         g.setColor(Color.BLACK);
         g.drawString("Constantes:", 10, titulo);
         
-        /*
-        for(VariableConstanteArreglo elemento: tab.a){
-            if(elemento.tipo==TablaVariablesConstantes.almacenaconst){
-               tamCons++;
-            }
-            if(elemento.tipo==TablaVariablesConstantes.almacenavari){
-                tamVar++;
-            }
-            if(elemento.tipo==TablaVariablesConstantes.almacenaarray){
-                tamArr++;
-            }
-        }
-        */
+        
         indicepintura+=titulo+15;
         
         for(VariableConstanteArreglo elemento: tab.a){
@@ -304,9 +291,9 @@ public class SLAG_VISTA extends javax.swing.JFrame {
                     String impresion=" "+cons.id+" : ";
                     
                     g.setColor(Color.black);
-                    g.drawString(impresion, 10, indicepintura+10);
+                    g.drawString(impresion, 10, indicepintura+20);
                     indicepintura+=15;
-                    g.drawString(impresion2, 10, indicepintura +10 );///nueva linea
+                    g.drawString(impresion2, 10, indicepintura +20 );///nueva linea
                     indicepintura+=15;///nueva linea
                     
                     int desplazamiento=10;
@@ -354,6 +341,7 @@ public class SLAG_VISTA extends javax.swing.JFrame {
             TimeUnit.SECONDS.sleep(1);
         }catch(Exception e){
             
+        }
         }
     }
     
