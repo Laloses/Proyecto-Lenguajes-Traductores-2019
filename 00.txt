@@ -1,0 +1,28 @@
+PROGRAMA EJEMPLO
+CONSTANTES
+    NUM=23
+    COLA='C'
+    ARREGLOS
+        DATOS={3,2,1,0}
+        DATOS_2={0,0}
+        DATOS_3={5,9,6}
+INICIO
+     SI (DATOS.LENGTH >1) ENTONCES
+        x=DATOS.LENGTH-1;
+        y=DATOS_2.LENGTH-1;
+        z=DATOS_3.LENGTH-1;
+        PARA var=0 HASTA x PASO +1 HACER
+            ESCRIBE(DATOS[var]);
+            escribe(var);
+            DATOS[var]=1;
+           FIN
+          	 PARA var2=0 HASTA y PASO +1 HACER
+          	  ESCRIBE(DATOS_2[var2]);
+         	   DATOS_2[var2]=2;
+           	FIN
+	PARA var2=0 HASTA z PASO +1 HACER
+          	  ESCRIBE(DATOS_3[var2]);
+         	   DATOS_3[var2]=3;
+           	FIN
+     FIN
+FIN
