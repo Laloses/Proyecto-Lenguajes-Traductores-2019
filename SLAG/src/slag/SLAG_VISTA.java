@@ -217,6 +217,7 @@ public class SLAG_VISTA extends javax.swing.JFrame {
         int indicepintura=0;
         int tamCons=0;
         int tamVar=0;
+        int tamArr=0;
         int titulo=20;
         
         g.setFont(new Font("Agency FB", Font.BOLD, 14));
@@ -227,7 +228,19 @@ public class SLAG_VISTA extends javax.swing.JFrame {
         g.setColor(Color.BLACK);
         g.drawString("Constantes:", 10, titulo);
         
-        
+        /*
+        for(VariableConstanteArreglo elemento: tab.a){
+            if(elemento.tipo==TablaVariablesConstantes.almacenaconst){
+               tamCons++;
+            }
+            if(elemento.tipo==TablaVariablesConstantes.almacenavari){
+                tamVar++;
+            }
+            if(elemento.tipo==TablaVariablesConstantes.almacenaarray){
+                tamArr++;
+            }
+        }
+        */
         indicepintura+=titulo+15;
         
         for(VariableConstanteArreglo elemento: tab.a){
@@ -236,7 +249,6 @@ public class SLAG_VISTA extends javax.swing.JFrame {
                     ConstanteEntera cons=(ConstanteEntera)elemento;
                     g.drawString(" "+cons.id+" : "+cons.get(), 10, indicepintura);
                     indicepintura+=20;
-                    
                 }else{
                     ConstanteCaracter cons=(ConstanteCaracter)elemento;
                     g.drawString(" "+cons.id+" : "+cons.get(), 10, indicepintura);
@@ -248,9 +260,13 @@ public class SLAG_VISTA extends javax.swing.JFrame {
         g.drawString("Variables:", 10, titulo+indicepintura);
         indicepintura+=titulo+15;
         
+        //variables para los contadores de los arreglos
+        String valArray="";
+        boolean mostrarVA=false;
+        int _nvar=0,_nItems=0,_nArrays=0;
         for(VariableConstanteArreglo elemento: tab.a){
             if(elemento.tipo==TablaVariablesConstantes.almacenavari){
-                
+                _nvar++;
                 if(elemento.cambio){
                     JFrame jf = new JFrame();
                     jf.setBackground(Color.red);
@@ -260,11 +276,16 @@ public class SLAG_VISTA extends javax.swing.JFrame {
                     VariableEntera cons=(VariableEntera)elemento;
                     g.drawString(" "+cons.id+" : "+cons.get(), 10, indicepintura);
                     indicepintura+=20;
-                    
+                    if(elemento.cambio){
+                        valArray=cons.id;
+                    }
                 }else{
                     VariableCaracter cons=(VariableCaracter)elemento;
                     g.drawString(" "+cons.id+" : "+cons.get(), 10, indicepintura);
                     indicepintura+=20;
+                    if(elemento.cambio){
+                        valArray=cons.id;
+                    }
                 }
                 elemento.cambio=false;
                 g.setColor(Color.BLACK);
@@ -275,63 +296,76 @@ public class SLAG_VISTA extends javax.swing.JFrame {
         indicepintura+=titulo+15;
         String impresion2 ="prueba..."; ///nueva linea
         for(VariableConstanteArreglo elemento: tab.a){
-
             if(elemento.tipo==TablaVariablesConstantes.almacenavari){ ///nueva linea
                 if(elemento.tipovalor==TablaVariablesConstantes.tipoentero){///nueva linea
                     VariableEntera cons2=(VariableEntera)elemento;///nueva linea
                     impresion2 = " "+cons2.id+" : "+cons2.get();///nueva linea
-                ///nueva linea
+                }///nueva linea
             }///nueva linea
-            
             if(elemento.tipo==TablaVariablesConstantes.almacenaarray){
-                
+                String _id="";
+                int _size=0;
+                String _elem[]; 
                 if(elemento.tipovalor==TablaVariablesConstantes.tipoentero){
-                    
-                    ArregloEntero cons=(ArregloEntero)elemento; 
-                    String impresion=" "+cons.id+" : ";
-                    
-                    g.setColor(Color.black);
-                    g.drawString(impresion, 10, indicepintura+20);
-                    indicepintura+=15;
-                    g.drawString(impresion2, 10, indicepintura +20 );///nueva linea
-                    indicepintura+=15;///nueva linea
-                    
-                    int desplazamiento=10;
-                    for(int j=0;j<cons.size();j++){
-                        
-                        if(j == elemento.indiceCambio){
-                            drawImage.setColor(Color.red);
-                            drawImage.fillRect(desplazamiento, indicepintura, 50, 50);
-                            
-                            drawImage.setColor(Color.black);
-                            drawImage.drawRect(desplazamiento, indicepintura, 50, 50);
-                            
-                            drawImage.setColor(Color.white);
-                            drawImage.drawString(Integer.toString(cons.get(j)), desplazamiento+20, indicepintura+30);
-                        }
-                        else{
-                            drawImage.setColor(Color.white);
-                            drawImage.fillRect(desplazamiento, indicepintura, 50, 50);
-                            
-                            drawImage.setColor(Color.black);
-                            drawImage.drawRect(desplazamiento, indicepintura, 50, 50);
-                            drawImage.drawString(Integer.toString(cons.get(j)), desplazamiento+20, indicepintura+30);
-                        }
-                        desplazamiento+=50;
+                     ArregloEntero conse=(ArregloEntero)elemento;
+                    _id=conse.id;
+                    _size=conse.size();
+                    _elem = new String[_size];
+                    for(int j=0;j<_size;j++){
+                        _elem[j]=Integer.toString(conse.get(j));
                     }
-                    
                 }else{
-                    ArregloCaracter cons=(ArregloCaracter)elemento;
-                    String impresion=" "+cons.id+" : { ";
-                    for(int j=0;j<cons.size();j++){
-                        impresion+=" '"+cons.get(j)+"' ,";
+                    ArregloCaracter consc=(ArregloCaracter)elemento;
+                    _id=consc.id;
+                    _size=consc.size();
+                    _elem = new String[_size];
+                    for(int j=0;j<_size;j++){
+                        _elem[j]=Character.toString(consc.get(j));
                     }
-                    impresion+=" }";
-                    //g.setColor(Color.red);
-                    g.drawString(impresion, 10, indicepintura+10);
                 }
-                
-                indicepintura+=60;
+                String impresion=" "+_id+" : { ";
+                for(int j=0;j<_size;j++){
+                    impresion=impresion+_elem[j]+" ";
+                }
+                impresion=impresion+"}";
+                g.setColor(Color.black);
+                g.drawString(impresion, 10, indicepintura+10);
+                indicepintura+=15;
+                //g.drawString(impresion2, 10, indicepintura +10 );///nueva linea
+                //indicepintura+=15;///nueva linea
+                int desplazamiento=10;
+                for(int j=0;j<_size;j++){
+                    if(j == elemento.indiceCambio){
+                        drawImage.setColor(Color.red);
+                        drawImage.fillRect(desplazamiento, indicepintura, 50, 50);
+
+                        drawImage.setColor(Color.black);
+                        drawImage.drawRect(desplazamiento, indicepintura, 50, 50);
+
+                        drawImage.setColor(Color.white);
+                        drawImage.drawString(_elem[j], desplazamiento+20, indicepintura+30);
+                        drawImage.setColor(Color.black);
+                        if(!valArray.equals(""))
+                            drawImage.drawString(valArray+"="+j, desplazamiento+10, indicepintura+65);
+                    }else{
+                        drawImage.setColor(Color.white);
+                        drawImage.fillRect(desplazamiento, indicepintura, 50, 50);
+
+                        drawImage.setColor(Color.black);
+                        drawImage.drawRect(desplazamiento, indicepintura, 50, 50);
+                        drawImage.drawString(_elem[j], desplazamiento+20, indicepintura+30);
+                    }
+                    desplazamiento+=50;
+                }
+                //String impresion=" "+cons.id+" : { ";
+                // for(int j=0;j<cons.size();j++){
+                  //  impresion+=" '"+cons.get(j)+"' ,";
+                //}
+                //impresion+=" }";
+                //g.setColor(Color.red);
+                //  g.drawString(impresion, 10, indicepintura+10);
+                //}
+                indicepintura+=70;
                 elemento.cambio=false;
                 g.setColor(Color.BLACK);
             }
@@ -339,10 +373,7 @@ public class SLAG_VISTA extends javax.swing.JFrame {
         
         try{
             TimeUnit.SECONDS.sleep(1);
-        }catch(Exception e){
-            
-        }
-        }
+        }catch(Exception e){}
     }
     
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed

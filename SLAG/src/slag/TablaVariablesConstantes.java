@@ -74,7 +74,7 @@ public class TablaVariablesConstantes {
     }
     
    public boolean SetArregloEntero(String id, int[] valor){
-        
+        id=id.toLowerCase();
         if(a.size()==0){
             ArregloEntero aux=new ArregloEntero(id,valor.length);
             aux.set(valor);
@@ -100,7 +100,7 @@ public class TablaVariablesConstantes {
     
     
     public boolean SetArregloCaracter(String id, char[] valor){
-        
+        id=id.toLowerCase();
         if(a.size()==0){
             ArregloCaracter aux=new ArregloCaracter(id,valor.length);
             aux.set(valor);
@@ -125,6 +125,7 @@ public class TablaVariablesConstantes {
     }
     
     public boolean setValorChar(String id, int indice, char valor, boolean ejecutar){
+        id=id.toLowerCase();
         boolean b=false,b2=false;
         ArregloCaracter auz;
         for(int i=0;i<a.size();i++){
@@ -162,6 +163,7 @@ public class TablaVariablesConstantes {
     }
     
     public boolean setValorInt(String id, int indice, int valor, boolean ejecutar){
+        id=id.toLowerCase();
         boolean b=false,b2=false;
         ArregloEntero auz;
         for(int i=0;i<a.size();i++){
@@ -199,6 +201,7 @@ public class TablaVariablesConstantes {
     }
     
     public boolean setValorChar(String id, char valor, boolean ejecutar){
+        id=id.toLowerCase();
         boolean b=false,b2=false;
         
         VariableCaracter auz;
@@ -238,6 +241,7 @@ public class TablaVariablesConstantes {
     }
     
     public boolean setValorInt(String id, int valor, boolean ejecutar){
+        id=id.toLowerCase();
         boolean b=false,b2=false;
         
         VariableEntera auz;
@@ -279,6 +283,7 @@ public class TablaVariablesConstantes {
     }
     
     public boolean getValorInt(String id){
+        id=id.toLowerCase();
         boolean b=false,b2=false;
         VariableEntera auz;
         ConstanteEntera auz2;
@@ -322,6 +327,7 @@ public class TablaVariablesConstantes {
     
     
     public boolean getValoChar(String id){
+        id=id.toLowerCase();
         boolean b=false,b2=false;
         VariableCaracter auz;
         ConstanteCaracter auz2;
@@ -364,6 +370,7 @@ public class TablaVariablesConstantes {
     }
     
     public boolean getValoChar(String id, int indice){
+        id=id.toLowerCase();
         boolean b=false,b2=false;
         ArregloCaracter auz;
         this.valorObtenido=false;
@@ -400,6 +407,7 @@ public class TablaVariablesConstantes {
     }
     
     public boolean getValoInt(String id, int indice){
+        id=id.toLowerCase();
         boolean b=false,b2=false;
         ArregloEntero auz;
         this.valorObtenido=false;
@@ -436,6 +444,7 @@ public class TablaVariablesConstantes {
     }
     
     public boolean getlargo(String id){
+        id=id.toLowerCase();
         boolean b=false,b2=false;
         ArregloCaracter auz;
         ArregloEntero auz2;
@@ -535,6 +544,7 @@ public class TablaVariablesConstantes {
     
     
     public int ComprobarTipo(String id){
+        id=id.toLowerCase();
         int tipo=-1;
         for(VariableConstanteArreglo elemento: a){
             if(elemento.id.compareTo(id)==0)
