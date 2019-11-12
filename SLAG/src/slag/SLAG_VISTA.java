@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.JTextPane;
 import java.awt.Graphics2D;
 
 /*
@@ -209,7 +209,19 @@ public class SLAG_VISTA extends javax.swing.JFrame {
         return this.jTextPane2.getText();
     }
     
+    public void PintarLinea(int linea){
+        int inicio=0,fin=0, cantLineas;
+        cantLineas = this.jTextPane1.getText().split("\n").length;
+        JTextPane pane;
+        this.jTextPane1.setText("");
+        for(){
+            pane= new JTextPane();
+            jTextPane1.add(pane);
+        }
+    }
+    
     public void PintarTabladatos(TablaVariablesConstantes tab, int linea){
+        PintarLinea(linea);
         Graphics g=this.jPanel1.getGraphics();
         Graphics2D drawImage = (Graphics2D) g;
         
