@@ -14,6 +14,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JFrame;
 import javax.swing.JTextPane;
 import java.awt.Graphics2D;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultHighlighter;
+import javax.swing.text.Highlighter;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -25,7 +28,7 @@ import java.awt.Graphics2D;
  *
  * @author STEWART
  */
-public class SLAG_VISTA extends javax.swing.JFrame {
+public class SLAG_VISTA extends javax.swing.JFrame{
 
     /**
      * Creates new form SLAG_VISTA
@@ -39,6 +42,8 @@ public class SLAG_VISTA extends javax.swing.JFrame {
     public SLAG_VISTA() {
         initComponents();
         this.setTitle(nombrearchivo);
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+        
         analizador=new AnalizadorLexico();
         analizadorSin=new AnalizadorSintactico(analizador,this);
         try
@@ -69,9 +74,8 @@ public class SLAG_VISTA extends javax.swing.JFrame {
         jTextPane1 = new javax.swing.JTextPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextPane2 = new javax.swing.JTextPane();
-        jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -91,23 +95,22 @@ public class SLAG_VISTA extends javax.swing.JFrame {
         jTextPane2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jScrollPane1.setViewportView(jTextPane2);
 
+        jLabel1.setText("jLabel1");
+
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setAutoscrolls(true);
+        jPanel1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 602, Short.MAX_VALUE)
+            .addGap(0, 636, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 494, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
-
-        jLabel1.setText("jLabel1");
-
-        jLabel2.setText("Stewart Axel Gomez Lozada                                         201424899                  compiladores 2018");
 
         jMenu1.setText("Archivo");
 
@@ -173,28 +176,18 @@ public class SLAG_VISTA extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 558, Short.MAX_VALUE)
                     .addComponent(jScrollPane2))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel2)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 385, Short.MAX_VALUE)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -209,22 +202,33 @@ public class SLAG_VISTA extends javax.swing.JFrame {
         return this.jTextPane2.getText();
     }
     
-    public void PintarLinea(int linea){
-        int inicio=0,fin=0, cantLineas;
-        cantLineas = this.jTextPane1.getText().split("\n").length;
-        JTextPane pane;
-        this.jTextPane1.setText("");
-        for(){
-            pane= new JTextPane();
-            jTextPane1.add(pane);
+    public void PintarLinea(int linea) throws BadLocationException{
+        int i,inicio=0,fin=0, tamTotal;
+        Highlighter h = this.jTextPane1.getHighlighter();
+        //Quitar hightlight anterior
+        tamTotal=this.jTextPane1.getText().length();
+        //h.addHighlight(0, tamTotal, new DefaultHighlighter.DefaultHighlightPainter(Color.white));
+        
+        String[] lineas;
+        lineas = this.jTextPane1.getText().split("\n");
+        for(i=0; i<linea; i++){
+            inicio=lineas[i].length();
         }
+        fin=inicio+lineas[linea].length();
+        //Obtener el estilo actual
+        System.out.println("Inicio: "+inicio+"; Fin: "+fin);
+        h.addHighlight(inicio, fin, new DefaultHighlighter.DefaultHighlightPainter(Color.red));
     }
     
-    public void PintarTabladatos(TablaVariablesConstantes tab, int linea){
-        PintarLinea(linea);
+    public void PintarTabladatos(TablaVariablesConstantes tab, int linea) throws BadLocationException{
         Graphics g=this.jPanel1.getGraphics();
         Graphics2D drawImage = (Graphics2D) g;
+        g.setClip(0, 0, (int)this.jPanel1.getBounds().getWidth(), (int)this.jPanel1.getBounds().getHeight());
         
+        this.jPanel1.setAutoscrolls(true);
+        
+        PintarLinea(linea);
+                
         jPanel1.paint(g);
         int indicepintura=0;
         int tamCons=0;
@@ -335,11 +339,11 @@ public class SLAG_VISTA extends javax.swing.JFrame {
                         _elem[j]=Character.toString(consc.get(j));
                     }
                 }
-                String impresion=" "+_id+" : { ";
-                for(int j=0;j<_size;j++){
-                    impresion=impresion+_elem[j]+" ";
-                }
-                impresion=impresion+"}";
+                String impresion=" "+_id+" :  ";
+//                for(int j=0;j<_size;j++){
+//                    impresion=impresion+_elem[j]+" ";
+//                }
+//                impresion=impresion+"}";
                 g.setColor(Color.black);
                 g.drawString(impresion, 10, indicepintura+10);
                 indicepintura+=15;
@@ -559,7 +563,6 @@ public class SLAG_VISTA extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
