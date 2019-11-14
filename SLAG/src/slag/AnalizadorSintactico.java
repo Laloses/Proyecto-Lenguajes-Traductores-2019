@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.JTextPane;
+import javax.swing.text.BadLocationException;
 
 /**
  *
@@ -95,7 +96,7 @@ public class AnalizadorSintactico {
     }
     
     
-    public Boolean ComprobarArchivo()throws FileNotFoundException, IOException{
+    public Boolean ComprobarArchivo()throws FileNotFoundException, IOException, BadLocationException{
         Boolean b = analizadorl.LeerArchivoAnalizar();
         if(b){
             analizadorl.ResetListaToken();
@@ -143,7 +144,7 @@ public class AnalizadorSintactico {
         }
     }
     
-    public boolean S(){
+    public boolean S() throws BadLocationException{
     switch(preanalisis.tipo){
     case programa:if(Emparejar(programa) && Emparejar(id) && DC() && DA() && Emparejar(inicio) && INS(true) && Emparejar(fin) && Emparejar(finarchivo)){
                         GenerarError();
@@ -241,7 +242,7 @@ public class AnalizadorSintactico {
         }
     }
     
-    public boolean DA(){
+    public boolean DA() throws BadLocationException{
         switch(preanalisis.tipo){
             case arreglos:  if(Emparejar(arreglos) && Emparejar(id)){
                                 String dddd=preanalisisprev.valor;
@@ -299,7 +300,7 @@ public class AnalizadorSintactico {
         }
     }
     
-    public boolean ARR(){
+    public boolean ARR() throws BadLocationException{
         switch(preanalisis.tipo){
             case id:        
                             if(Emparejar(id)){
@@ -413,7 +414,7 @@ public class AnalizadorSintactico {
         }
     }
     
-    public boolean INS(boolean ejecutar){
+    public boolean INS(boolean ejecutar) throws BadLocationException{
         switch(preanalisis.tipo){
             case id:        if(EXP(ejecutar)){
                                 //ñlksjdflñkasjdflñkjasdlñkfjañslkdjflñaksjdflñkajsdñflkjasdlñkfjlaskdjf
@@ -445,7 +446,7 @@ public class AnalizadorSintactico {
             case lee:       if(LEE(ejecutar)){
                                 //ñlksjdflñkasjdflñkjasdlñkfjañslkdjflñaksjdflñkajsdñflkjasdlñkfjlaskdjf
                                 if(ejecutar)
-                                terminal.PintarTabladatos(tabla,preanalisisprev.linea);
+                                    terminal.PintarTabladatos(tabla,preanalisisprev.linea);
                                 return INS(ejecutar);
                             }else{
                                 return false;
@@ -454,14 +455,14 @@ public class AnalizadorSintactico {
             case escribe:   if(ESCRIBE(ejecutar)){
                                 //ñlksjdflñkasjdflñkjasdlñkfjañslkdjflñaksjdflñkajsdñflkjasdlñkfjlaskdjf
                                 if(ejecutar)
-                                terminal.PintarTabladatos(tabla,preanalisisprev.linea);
+                                    terminal.PintarTabladatos(tabla,preanalisisprev.linea);
                                 return INS(ejecutar);
                             }else{
                                 return false;
                             }
             
             case fin:       //epsilon
-            case sino:      return true;
+            /*case sino: El terminal 'sino' no va en esta parte*/      return true;
             
             default:        espera1=id;
                             espera2=si;
@@ -469,7 +470,7 @@ public class AnalizadorSintactico {
                             espera4=lee;
                             espera5=escribe;
                             espera6=fin;
-                            espera7=sino;
+                            //espera7=sino;
                             return false;
         }
     }
@@ -481,7 +482,7 @@ public class AnalizadorSintactico {
         switch(preanalisis.tipo){
             case id:        if(VARIABLE(variable) && Emparejar(asignacion) && EXPRESION(expresion) && Emparejar(pyc)){
                                 System.out.println(variable.id+"--"+expresion.valor);
-                                //System.out.println(expresion.valor+"--"+expresion.tipodato);
+                                //System.out.println(expresion.valor+"--"+expresion.tipodato); FALLA DEL 
                                 if(variable.existe){
                                     if(expresion.tipodato==variable.tipodato){
                                             if(variable.tipodato){
@@ -554,7 +555,7 @@ public class AnalizadorSintactico {
                                 return false;
                             }
             
-            case parenteC:
+            //case parenteC: NO PERTENECE
             case asignacion:return true;
                         
             default:        espera1=corcheteA;
@@ -746,7 +747,7 @@ public class AnalizadorSintactico {
                             var.hayi=false;
                             return Emparejar(punto) && Emparejar(length);
             
-            case parenteC:
+            //case parenteC: NO PERTENECE, NO NECESARIO Xd
             case corcheteC:
             case igual:
             case diferente:
@@ -817,7 +818,7 @@ public class AnalizadorSintactico {
         }
     }
     
-    public boolean SI(boolean ejecutar){
+    public boolean SI(boolean ejecutar) throws BadLocationException{
         Datos v1=new Datos();
         Datos v2=new Datos();
         Datos v3=new Datos();
@@ -874,7 +875,7 @@ public class AnalizadorSintactico {
         }
     }
     
-    public boolean SINO(Datos sinov,boolean ejecutar){
+    public boolean SINO(Datos sinov,boolean ejecutar) throws BadLocationException{
         switch(preanalisis.tipo){
             case sino:      sinov.existe=true;
                             return Emparejar(sino) && INS(ejecutar) && Emparejar(fin);
@@ -931,7 +932,7 @@ public class AnalizadorSintactico {
         }
     }
     
-    public boolean PARA(boolean ejecutar){
+    public boolean PARA(boolean ejecutar) throws BadLocationException{
         Datos variable=new Datos();
         Datos lim1=new Datos();
         Datos lim2=new Datos();

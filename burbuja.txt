@@ -2,6 +2,7 @@ Programa burbuja
 arreglos
 A={5,8,2,9,1}
 Inicio
+	aUx=0;
 	Para i=2 hasta A.length paso +1 hacer
 		p=A.length-i;
 		Para j=0 hasta p paso +1 hacer
