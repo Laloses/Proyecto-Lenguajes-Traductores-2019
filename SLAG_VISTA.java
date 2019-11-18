@@ -105,7 +105,7 @@ public class SLAG_VISTA extends javax.swing.JFrame{
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 636, Short.MAX_VALUE)
+            .addGap(0, 684, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -183,11 +183,11 @@ public class SLAG_VISTA extends javax.swing.JFrame{
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
+                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
 
@@ -222,6 +222,7 @@ public class SLAG_VISTA extends javax.swing.JFrame{
     
     public void PintarTabladatos(TablaVariablesConstantes tab, int linea) throws BadLocationException{
         Graphics g=this.jPanel1.getGraphics();
+        //Graphics g2= this.jPanel2.getGraphics();
         Graphics2D drawImage = (Graphics2D) g;
         g.setClip(0, 0, (int)this.jPanel1.getBounds().getWidth(), (int)this.jPanel1.getBounds().getHeight());
         
@@ -308,8 +309,9 @@ public class SLAG_VISTA extends javax.swing.JFrame{
             }
         }
         
-        g.drawString("Arreglos:", 10, titulo+indicepintura);
-        indicepintura+=titulo+15;
+        g.drawString("Arreglos:", 200, 20);
+        //indicepintura+=titulo+15;
+        indicepintura=30;
         String impresion2 ="prueba..."; ///nueva linea
         for(VariableConstanteArreglo elemento: tab.a){
             if(elemento.tipo==TablaVariablesConstantes.almacenavari){ ///nueva linea
@@ -345,11 +347,13 @@ public class SLAG_VISTA extends javax.swing.JFrame{
 //                }
 //                impresion=impresion+"}";
                 g.setColor(Color.black);
-                g.drawString(impresion, 10, indicepintura+10);
+//                g.drawString(impresion, 10, indicepintura+10);
+                g.drawString(impresion, 200, indicepintura+10);
                 indicepintura+=15;
                 //g.drawString(impresion2, 10, indicepintura +10 );///nueva linea
                 //indicepintura+=15;///nueva linea
-                int desplazamiento=10;
+//                int desplazamiento=10;
+                int desplazamiento=200;
                 for(int j=0;j<_size;j++){
                     if(j == elemento.indiceCambio){
                         drawImage.setColor(Color.red);
