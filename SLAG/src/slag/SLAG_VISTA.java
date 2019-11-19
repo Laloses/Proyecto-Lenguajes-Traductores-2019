@@ -209,6 +209,10 @@ public class SLAG_VISTA extends javax.swing.JFrame{
         tamTotal=this.jTextPane1.getText().length();
         //h.addHighlight(0, tamTotal, new DefaultHighlighter.DefaultHighlightPainter(Color.white));
         
+        //para quitar las lineas puestas anteriormente
+        h.removeAllHighlights();    
+        
+        //Ciclo para pintar
         String[] lineas;
         lineas = this.jTextPane1.getText().split("\n");
         for(i=0; i<linea; i++){
@@ -392,7 +396,7 @@ public class SLAG_VISTA extends javax.swing.JFrame{
         }
         
         try{
-            TimeUnit.SECONDS.sleep(1);
+            //imeUnit.SECONDS.sleep(1);
         }catch(Exception e){}
     }
     
