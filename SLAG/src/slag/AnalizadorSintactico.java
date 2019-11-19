@@ -747,7 +747,7 @@ public class AnalizadorSintactico {
                             var.hayi=false;
                             return Emparejar(punto) && Emparejar(length);
             
-            //case parenteC: NO PERTENECE, NO NECESARIO Xd
+            case parenteC: 
             case corcheteC:
             case igual:
             case diferente:
