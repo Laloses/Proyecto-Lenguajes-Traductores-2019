@@ -216,7 +216,14 @@ public class SLAG_VISTA extends javax.swing.JFrame{
         h.removeAllHighlights();  
             
         
+<<<<<<< Updated upstream
         //Ciclo para obtener las lineas
+=======
+        //para quitar las lineas puestas anteriormente
+        h.removeAllHighlights();    
+        
+        //Ciclo para pintar
+>>>>>>> Stashed changes
         String[] lineas;
         lineas = this.jTextPane1.getText().split("\n");
         for(i=0; i<linea; i++){
@@ -398,8 +405,13 @@ public class SLAG_VISTA extends javax.swing.JFrame{
             }
         }
         try{
+<<<<<<< Updated upstream
             TimeUnit.SECONDS.sleep(1);
         }catch(Exception e){}    
+=======
+            //imeUnit.SECONDS.sleep(1);
+        }catch(Exception e){}
+>>>>>>> Stashed changes
     }
     
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
