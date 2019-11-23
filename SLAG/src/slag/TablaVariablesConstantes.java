@@ -22,6 +22,7 @@ public class TablaVariablesConstantes {
     ArrayList<VariableConstanteArreglo> a;
     String Error;
     int[] s;
+    
     char[] s2;
     
     int ss;

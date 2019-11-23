@@ -91,9 +91,11 @@ public class SLAG_VISTA extends javax.swing.JFrame{
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jTextPane1.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        jTextPane1.setMaximumSize(new java.awt.Dimension(588, 415));
         jScrollPane2.setViewportView(jTextPane1);
 
         jTextPane2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jTextPane2.setMaximumSize(new java.awt.Dimension(588, 2147483647));
         jScrollPane1.setViewportView(jTextPane2);
 
         jLabel1.setText("jLabel1");
@@ -106,7 +108,7 @@ public class SLAG_VISTA extends javax.swing.JFrame{
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 626, Short.MAX_VALUE)
+            .addGap(0, 634, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -175,19 +177,19 @@ public class SLAG_VISTA extends javax.swing.JFrame{
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2))
+                    .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 592, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 436, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -204,29 +206,25 @@ public class SLAG_VISTA extends javax.swing.JFrame{
     }
     
     public void PintarLinea(int linea) throws BadLocationException{
-        int i,inicio=0,fin=0, tamTotal;
-        
-        //this.jTextPane1.hide();
-        this.jTextPane1.setVisible(false);
+        int i=0,j=0,inicio=0,fin=0, tamTotal;
+        Highlighter h = this.jTextPane1.getHighlighter();
+        tamTotal=this.jTextPane1.getText().length();
         this.jTextPane1.update(this.jTextPane1.getGraphics());
         
-        Highlighter h = this.jTextPane1.getHighlighter();
+        
         //Quitar hightlight anterior
-        tamTotal=this.jTextPane1.getText().length();
-        //h.addHighlight(0, tamTotal, new DefaultHighlighter.DefaultHighlightPainter(Color.white));
+        h.removeAllHighlights();  
+            
         
-        //para quitar las lineas puestas anteriormente
-        h.removeAllHighlights();    
-        
-        //Ciclo para pintar
+        //Ciclo para obtener las lineas
         String[] lineas;
         lineas = this.jTextPane1.getText().split("\n");
         for(i=0; i<linea; i++){
-            inicio=lineas[i].length();
+            inicio+=lineas[i].length()+1;
         }
-        fin=inicio+lineas[linea].length();
+        fin=inicio+lineas[linea].length()+1;
         //Obtener el estilo actual
-        System.out.println("Inicio: "+inicio+"; Fin: "+fin);
+        System.out.println("Inicio pintado: "+inicio+"; Fin pintado: "+fin);
         h.addHighlight(inicio, fin, new DefaultHighlighter.DefaultHighlightPainter(Color.red));
     }
     
@@ -245,9 +243,10 @@ public class SLAG_VISTA extends javax.swing.JFrame{
         int tamArr=0;
         int titulo=20;
         
+        //Pintar numero de linea 
         g.setFont(new Font("Agency FB", Font.BOLD, 14));
-        g.setColor(Color.BLUE);
-        g.drawString(linea+"",300,10);
+//        g.setColor(Color.BLUE);
+//        g.drawString(linea+"",300,10);
         
         this.jTextPane1.getText();
         g.setColor(Color.BLACK);
@@ -398,7 +397,6 @@ public class SLAG_VISTA extends javax.swing.JFrame{
                 g.setColor(Color.BLACK);
             }
         }
-        
         try{
             TimeUnit.SECONDS.sleep(1);
         }catch(Exception e){}    
@@ -456,6 +454,7 @@ public class SLAG_VISTA extends javax.swing.JFrame{
               JOptionPane.showMessageDialog(null,"Analisis Exitoso");
                 Highlighter h = this.jTextPane1.getHighlighter();
                 h.removeAllHighlights();
+                this.jTextPane2.setText("SLAG: ");
             }else{
               JOptionPane.showMessageDialog(null,"ERROR");
               jTextPane2.setText("SLAG:\n"+analizadorSin.getError());
