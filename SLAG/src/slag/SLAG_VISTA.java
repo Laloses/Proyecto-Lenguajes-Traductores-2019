@@ -14,6 +14,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JFrame;
 import javax.swing.JTextPane;
 import java.awt.Graphics2D;
+import java.io.FileNotFoundException;
 import javax.swing.JPanel;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
@@ -40,15 +41,22 @@ public class SLAG_VISTA extends javax.swing.JFrame{
      String patharchivo=null;
      String nombrearchivoES="Especificacion_lexico.txt";
      String patharchivoES="Especificacion_lexico.txt";
+    public boolean pausa;
+    public int seg;
+    public Thread t;
     public SLAG_VISTA() {
+        pausa=false;
+        seg=1;
         initComponents();
         this.setTitle(nombrearchivo);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+        this.Pausa.setVisible(false);
         
         analizador=new AnalizadorLexico();
         analizadorSin=new AnalizadorSintactico(analizador,this);
         try
         {
+            //t= new Thread(analizadorSin);
             analizador.SetArchivoEspecificacion(patharchivoES);
             analizador.LeerArchivoEspecificacion();
 
@@ -77,6 +85,7 @@ public class SLAG_VISTA extends javax.swing.JFrame{
         jTextPane2 = new javax.swing.JTextPane();
         jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
+        Pausa = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -91,9 +100,11 @@ public class SLAG_VISTA extends javax.swing.JFrame{
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jTextPane1.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        jTextPane1.setMaximumSize(new java.awt.Dimension(600, 2147483647));
         jScrollPane2.setViewportView(jTextPane1);
 
         jTextPane2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jTextPane2.setMaximumSize(new java.awt.Dimension(600, 2147483647));
         jScrollPane1.setViewportView(jTextPane2);
 
         jLabel1.setText("jLabel1");
@@ -106,12 +117,19 @@ public class SLAG_VISTA extends javax.swing.JFrame{
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 626, Short.MAX_VALUE)
+            .addGap(0, 752, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
+
+        Pausa.setText("Pausa");
+        Pausa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                PausaActionPerformed(evt);
+            }
+        });
 
         jMenu1.setText("Archivo");
 
@@ -175,20 +193,26 @@ public class SLAG_VISTA extends javax.swing.JFrame{
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 468, Short.MAX_VALUE)
                     .addComponent(jScrollPane2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 752, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Pausa))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE)
+                        .addComponent(Pausa)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 466, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
 
@@ -199,40 +223,38 @@ public class SLAG_VISTA extends javax.swing.JFrame{
         this.jTextPane2.setText(aux);
     }
     
+    
     public String ObtenerTerminal(){
         return this.jTextPane2.getText();
     }
     
     public void PintarLinea(int linea) throws BadLocationException{
-        int i,inicio=0,fin=0, tamTotal;
+        int i,inicio=0,fin=0;
         
-        //this.jTextPane1.hide();
-        this.jTextPane1.setVisible(false);
         this.jTextPane1.update(this.jTextPane1.getGraphics());
         
-        Highlighter h = this.jTextPane1.getHighlighter();
-        //Quitar hightlight anterior
-        tamTotal=this.jTextPane1.getText().length();
-        //h.addHighlight(0, tamTotal, new DefaultHighlighter.DefaultHighlightPainter(Color.white));
-        
         //para quitar las lineas puestas anteriormente
+        Highlighter h = this.jTextPane1.getHighlighter();
         h.removeAllHighlights();    
         
         //Ciclo para pintar
         String[] lineas;
         lineas = this.jTextPane1.getText().split("\n");
         for(i=0; i<linea; i++){
-            inicio=lineas[i].length();
+            inicio+=lineas[i].length()+1;
         }
-        fin=inicio+lineas[linea].length();
+        if(linea!=0)
+            fin=inicio+lineas[linea].length();
         //Obtener el estilo actual
         System.out.println("Inicio: "+inicio+"; Fin: "+fin);
-        h.addHighlight(inicio, fin, new DefaultHighlighter.DefaultHighlightPainter(Color.red));
+        h.addHighlight(inicio, fin, new DefaultHighlighter.DefaultHighlightPainter(Color.green));
+        this.jTextPane1.update(this.jTextPane1.getGraphics());
     }
     
     public void PintarTabladatos(TablaVariablesConstantes tab, int linea) throws BadLocationException{
+        
         Graphics g=this.jPanel1.getGraphics();
-        //Graphics g2= this.jPanel2.getGraphics();
+        
         Graphics2D drawImage = (Graphics2D) g;
         g.setClip(0, 0, (int)this.jPanel1.getBounds().getWidth(), (int)this.jPanel1.getBounds().getHeight());
         
@@ -245,9 +267,9 @@ public class SLAG_VISTA extends javax.swing.JFrame{
         int tamArr=0;
         int titulo=20;
         
-        g.setFont(new Font("Agency FB", Font.BOLD, 14));
-        g.setColor(Color.BLUE);
-        g.drawString(linea+"",300,10);
+        g.setFont(new Font("Arial", Font.BOLD, 12));
+        //g.setColor(Color.BLUE);
+        //g.drawString(linea+"",300,10);
         
         this.jTextPane1.getText();
         g.setColor(Color.BLACK);
@@ -287,14 +309,15 @@ public class SLAG_VISTA extends javax.swing.JFrame{
         
         //variables para los contadores de los arreglos
         String valArray="";
+        int valVAr=0;
         boolean mostrarVA=false;
         int _nvar=0,_nItems=0,_nArrays=0;
         for(VariableConstanteArreglo elemento: tab.a){
             if(elemento.tipo==TablaVariablesConstantes.almacenavari){
                 _nvar++;
                 if(elemento.cambio){
-                    JFrame jf = new JFrame();
-                    jf.setBackground(Color.red);
+//                    JFrame jf = new JFrame();
+//                    jf.setBackground(Color.red);
                     g.setColor(Color.red);
                 }
                 if(elemento.tipovalor==TablaVariablesConstantes.tipoentero){
@@ -303,6 +326,7 @@ public class SLAG_VISTA extends javax.swing.JFrame{
                     indicepintura+=20;
                     if(elemento.cambio){
                         valArray=cons.id;
+                        valVAr=cons.get();
                     }
                 }else{
                     VariableCaracter cons=(VariableCaracter)elemento;
@@ -310,6 +334,7 @@ public class SLAG_VISTA extends javax.swing.JFrame{
                     indicepintura+=20;
                     if(elemento.cambio){
                         valArray=cons.id;
+                        valVAr=cons.get();
                     }
                 }
                 elemento.cambio=false;
@@ -349,6 +374,7 @@ public class SLAG_VISTA extends javax.swing.JFrame{
                         _elem[j]=Character.toString(consc.get(j));
                     }
                 }
+                //Nombre del arreglo
                 String impresion=" "+_id+" :  ";
 //                for(int j=0;j<_size;j++){
 //                    impresion=impresion+_elem[j]+" ";
@@ -357,24 +383,25 @@ public class SLAG_VISTA extends javax.swing.JFrame{
                 g.setColor(Color.black);
 //                g.drawString(impresion, 10, indicepintura+10);
                 g.drawString(impresion, 200, indicepintura+10);
-                indicepintura+=15;
+                indicepintura+=30;
                 //g.drawString(impresion2, 10, indicepintura +10 );///nueva linea
                 //indicepintura+=15;///nueva linea
 //                int desplazamiento=10;
                 int desplazamiento=200;
                 for(int j=0;j<_size;j++){
                     if(j == elemento.indiceCambio){
-                        drawImage.setColor(Color.red);
+                        drawImage.setColor(Color.green);
                         drawImage.fillRect(desplazamiento, indicepintura, 50, 50);
 
                         drawImage.setColor(Color.black);
                         drawImage.drawRect(desplazamiento, indicepintura, 50, 50);
 
-                        drawImage.setColor(Color.white);
                         drawImage.drawString(_elem[j], desplazamiento+20, indicepintura+30);
                         drawImage.setColor(Color.black);
-                        if(!valArray.equals(""))
-                            drawImage.drawString(valArray+"="+j, desplazamiento+10, indicepintura+65);
+                        if(valVAr==j){
+                            if(!valArray.equals(""))
+                                drawImage.drawString(valArray+"="+valVAr, desplazamiento+10, indicepintura-5);
+                        }
                     }else{
                         drawImage.setColor(Color.white);
                         drawImage.fillRect(desplazamiento, indicepintura, 50, 50);
@@ -383,6 +410,7 @@ public class SLAG_VISTA extends javax.swing.JFrame{
                         drawImage.drawRect(desplazamiento, indicepintura, 50, 50);
                         drawImage.drawString(_elem[j], desplazamiento+20, indicepintura+30);
                     }
+                    drawImage.drawString(""+j, desplazamiento+20, indicepintura+65);
                     desplazamiento+=50;
                 }
                 //String impresion=" "+cons.id+" : { ";
@@ -400,7 +428,7 @@ public class SLAG_VISTA extends javax.swing.JFrame{
         }
         
         try{
-            TimeUnit.SECONDS.sleep(1);
+            t.sleep(1500);            //TimeUnit.SECONDS.sleep(1);
         }catch(Exception e){}    
     }
     
@@ -444,23 +472,32 @@ public class SLAG_VISTA extends javax.swing.JFrame{
             }
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
+    public void ocultarBoton(){
+        this.Pausa.setVisible(false);
+    }
+    public void somemethod() throws IOException, FileNotFoundException, BadLocationException, InterruptedException{
+        t =new Thread(analizadorSin);
+        t.start();
+        jTextPane2.setText("SLAG:\n"+"Se termino la ejecución");
+    }
+    
+    //menu ejecutar
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        this.Pausa.setVisible(true);
         jMenuItem3ActionPerformed(evt);
         if(patharchivo!=null){
           analizador.SetArchivoAnalizar(patharchivo);
           try{
-
-            if(analizadorSin.ComprobarArchivo()){
+            somemethod();
+            //t.stop();
+            if(analizadorSin.valAnalisis){
               //jTextPane2.setText("SLAG: \n Tokens :\n"+analizador.ImprimirListaTokens()+"\n"+analizadorSin.getError());
-              //jTextPane2.setText("SLAG:\n"+analizadorSin.getError());
-              JOptionPane.showMessageDialog(null,"Analisis Exitoso");
-                Highlighter h = this.jTextPane1.getHighlighter();
-                h.removeAllHighlights();
+              jTextPane2.setText("SLAG:\n"+"Analisis Exitoso");
+              //JOptionPane.showMessageDialog(null,"Analisis Exitoso");
             }else{
-              JOptionPane.showMessageDialog(null,"ERROR");
-              jTextPane2.setText("SLAG:\n"+analizadorSin.getError());
+              //JOptionPane.showMessageDialog(null,"ERROR");
+              jTextPane2.setText("SLAG: \n"+analizadorSin.getError());
             }
-
           }catch(Exception e){
             JOptionPane.showMessageDialog(null,"ERROR: OCURRIO UN PROBLEMA AL ABRIR EL ARCHIVO");
           }
@@ -540,6 +577,32 @@ public class SLAG_VISTA extends javax.swing.JFrame{
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenu2ActionPerformed
 
+    public int getSegundos(){
+//        int _seg=seg;
+//        if(seg==1){
+//            //jLabel2.setText("pausado");
+//        }else{
+//            //jLabel2.setText("ejecutando");
+//        }
+////        seg=0;
+        return seg;
+    }
+
+    private void PausaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PausaActionPerformed
+        if(pausa){
+            Pausa.setText("Pausa");
+            jTextPane2.setText("SLAG:\n"+"Ejecutando");
+            pausa=false;
+            seg=0;
+        }
+        else{
+            pausa=true;
+            Pausa.setText("Continuar");
+            jTextPane2.setText("SLAG:\n"+"Pausado");
+            seg=1;
+        }
+    }//GEN-LAST:event_PausaActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -576,6 +639,7 @@ public class SLAG_VISTA extends javax.swing.JFrame{
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Pausa;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;

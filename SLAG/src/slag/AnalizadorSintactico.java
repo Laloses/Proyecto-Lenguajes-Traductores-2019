@@ -8,6 +8,9 @@ package slag;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
@@ -16,8 +19,9 @@ import javax.swing.text.BadLocationException;
  *
  * @author STEWART
  */
-public class AnalizadorSintactico {
-    
+public class AnalizadorSintactico implements Runnable{
+    public int segundos;
+    public boolean valAnalisis;
     boolean banderaentrada;
     String entrada;
     SLAG_VISTA terminal;
@@ -91,12 +95,37 @@ public class AnalizadorSintactico {
     
     public AnalizadorSintactico(AnalizadorLexico a, SLAG_VISTA termi){
         analizadorl=a;
+        segundos=0;
+        valAnalisis=false;
         preanalisis=null;
         this.terminal=termi;
     }
     
+    public void run(){
+        try {
+            ComprobarArchivo();
+            Thread.currentThread().interrupt();
+        } catch (IOException ex) {
+            Logger.getLogger(AnalizadorSintactico.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (BadLocationException ex) {
+            Logger.getLogger(AnalizadorSintactico.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(AnalizadorSintactico.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    } 
     
-    public Boolean ComprobarArchivo()throws FileNotFoundException, IOException, BadLocationException{
+    public void pausar() throws InterruptedException{
+        if(terminal.pausa){
+            segundos=terminal.getSegundos();
+            TimeUnit.SECONDS.sleep(segundos);
+        }
+        else{
+            return;
+        }
+        pausar();
+    }
+
+    public void ComprobarArchivo()throws FileNotFoundException, IOException, BadLocationException, InterruptedException{
         Boolean b = analizadorl.LeerArchivoAnalizar();
         if(b){
             analizadorl.ResetListaToken();
@@ -106,13 +135,16 @@ public class AnalizadorSintactico {
             System.out.println("analisis sintactico iniciado");
             tabla.a.clear();
             b=S();
-            terminal.PintarTabladatos(tabla,0);
+            //terminal.PintarTabladatos(tabla,0);
+            //terminal.PintarLinea(0);
+            //pausar();
             System.out.println("analisis sintactico terminado");
             tabla.ImprimirTablaVariables();
         }else{
            Error=analizadorl.getErroranalisis();
         }
-        return b;
+          valAnalisis= b;
+//        return b;
     }
     
     public String getError(){
@@ -144,7 +176,7 @@ public class AnalizadorSintactico {
         }
     }
     
-    public boolean S() throws BadLocationException{
+    public boolean S() throws BadLocationException, InterruptedException{
     switch(preanalisis.tipo){
     case programa:if(Emparejar(programa) && Emparejar(id) && DC() && DA() && Emparejar(inicio) && INS(true) && Emparejar(fin) && Emparejar(finarchivo)){
                         GenerarError();
@@ -242,7 +274,7 @@ public class AnalizadorSintactico {
         }
     }
     
-    public boolean DA() throws BadLocationException{
+    public boolean DA() throws BadLocationException, InterruptedException{
         switch(preanalisis.tipo){
             case arreglos:  if(Emparejar(arreglos) && Emparejar(id)){
                                 String dddd=preanalisisprev.valor;
@@ -292,6 +324,8 @@ public class AnalizadorSintactico {
             case inicio:    //epsilon
                             //ñlksjdflñkasjdflñkjasdlñkfjañslkdjflñaksjdflñkajsdñflkjasdlñkfjlaskdjf
                             terminal.PintarTabladatos(tabla,preanalisis.linea);
+                            //terminal.PintarLinea(preanalisis.linea);
+                            pausar();
                             return true;
             
             default:        espera1=arreglos;
@@ -300,7 +334,7 @@ public class AnalizadorSintactico {
         }
     }
     
-    public boolean ARR() throws BadLocationException{
+    public boolean ARR() throws BadLocationException, InterruptedException{
         switch(preanalisis.tipo){
             case id:        
                             if(Emparejar(id)){
@@ -349,6 +383,8 @@ public class AnalizadorSintactico {
             case inicio:    //epsilon
                             //ñlksjdflñkasjdflñkjasdlñkfjañslkdjflñaksjdflñkajsdñflkjasdlñkfjlaskdjf
                             terminal.PintarTabladatos(tabla,preanalisis.linea);
+                            //terminal.PintarLinea(preanalisis.linea);
+                            pausar();
                             return true;
             
             default:        espera1=id;
@@ -414,12 +450,14 @@ public class AnalizadorSintactico {
         }
     }
     
-    public boolean INS(boolean ejecutar) throws BadLocationException{
+    public boolean INS(boolean ejecutar) throws BadLocationException, InterruptedException{
         switch(preanalisis.tipo){
             case id:        if(EXP(ejecutar)){
                                 //ñlksjdflñkasjdflñkjasdlñkfjañslkdjflñaksjdflñkajsdñflkjasdlñkfjlaskdjf
                                 if(ejecutar)
                                     terminal.PintarTabladatos(tabla,preanalisisprev.linea);
+                                    //terminal.PintarLinea(preanalisis.linea);
+                                    pausar();
                                 return INS(ejecutar);
                             }else{
                                 return false;
@@ -429,6 +467,8 @@ public class AnalizadorSintactico {
                                 //ñlksjdflñkasjdflñkjasdlñkfjañslkdjflñaksjdflñkajsdñflkjasdlñkfjlaskdjf
                                 if(ejecutar)
                                 terminal.PintarTabladatos(tabla,preanalisisprev.linea);
+                                //terminal.PintarLinea(preanalisis.linea);
+                                pausar();
                                 return INS(ejecutar);
                             }else{
                                 return false;
@@ -438,6 +478,8 @@ public class AnalizadorSintactico {
                                 //ñlksjdflñkasjdflñkjasdlñkfjañslkdjflñaksjdflñkajsdñflkjasdlñkfjlaskdjf
                                 if(ejecutar)
                                     terminal.PintarTabladatos(tabla,preanalisisprev.linea);
+                                    //terminal.PintarLinea(preanalisis.linea);
+                                    pausar();
                                 return INS(ejecutar);
                             }else{
                                 return false;
@@ -447,6 +489,8 @@ public class AnalizadorSintactico {
                                 //ñlksjdflñkasjdflñkjasdlñkfjañslkdjflñaksjdflñkajsdñflkjasdlñkfjlaskdjf
                                 if(ejecutar)
                                     terminal.PintarTabladatos(tabla,preanalisisprev.linea);
+                                    //terminal.PintarLinea(preanalisis.linea);
+                                    pausar();
                                 return INS(ejecutar);
                             }else{
                                 return false;
@@ -456,13 +500,15 @@ public class AnalizadorSintactico {
                                 //ñlksjdflñkasjdflñkjasdlñkfjañslkdjflñaksjdflñkajsdñflkjasdlñkfjlaskdjf
                                 if(ejecutar)
                                     terminal.PintarTabladatos(tabla,preanalisisprev.linea);
+                                    //terminal.PintarLinea(preanalisis.linea);
+                                    pausar();
                                 return INS(ejecutar);
                             }else{
                                 return false;
                             }
             
             case fin:       //epsilon
-            /*case sino: El terminal 'sino' no va en esta parte*/      return true;
+            case sino:      return true;
             
             default:        espera1=id;
                             espera2=si;
@@ -470,7 +516,7 @@ public class AnalizadorSintactico {
                             espera4=lee;
                             espera5=escribe;
                             espera6=fin;
-                            //espera7=sino;
+                            espera7=sino;
                             return false;
         }
     }
@@ -555,7 +601,7 @@ public class AnalizadorSintactico {
                                 return false;
                             }
             
-            //case parenteC: NO PERTENECE
+            case parenteC: 
             case asignacion:return true;
                         
             default:        espera1=corcheteA;
@@ -818,7 +864,7 @@ public class AnalizadorSintactico {
         }
     }
     
-    public boolean SI(boolean ejecutar) throws BadLocationException{
+    public boolean SI(boolean ejecutar) throws BadLocationException, InterruptedException{
         Datos v1=new Datos();
         Datos v2=new Datos();
         Datos v3=new Datos();
@@ -875,7 +921,7 @@ public class AnalizadorSintactico {
         }
     }
     
-    public boolean SINO(Datos sinov,boolean ejecutar) throws BadLocationException{
+    public boolean SINO(Datos sinov,boolean ejecutar) throws BadLocationException, InterruptedException{
         switch(preanalisis.tipo){
             case sino:      sinov.existe=true;
                             return Emparejar(sino) && INS(ejecutar) && Emparejar(fin);
@@ -932,7 +978,7 @@ public class AnalizadorSintactico {
         }
     }
     
-    public boolean PARA(boolean ejecutar) throws BadLocationException{
+    public boolean PARA(boolean ejecutar) throws BadLocationException, InterruptedException{
         Datos variable=new Datos();
         Datos lim1=new Datos();
         Datos lim2=new Datos();
@@ -1155,6 +1201,8 @@ public class AnalizadorSintactico {
         
         aux+="\n"+Error;
         terminal.ActualizarTerminal(aux);
+        if(Error=="archivo valido")
+            terminal.ocultarBoton();
     }
     
     public String TokenEsperado(int tespe){
