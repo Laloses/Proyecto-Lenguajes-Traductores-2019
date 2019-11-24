@@ -147,9 +147,7 @@ public class AnalizadorLexico{
     System.out.println(archivo_especificacion);
     BufferedReader b = new BufferedReader(f);
 
-    //Aqui esta el formato de la especificacion del lexico, el TXT que no tiene comentarios
-    //Esto hay que pasarselo a Jorge, para que lo meta al documento
-    
+
     //leemos los simbolos disponibles
     while((cadena=b.readLine()).compareTo("---F---")!=0){
         sim.add(cadena);

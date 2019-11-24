@@ -446,7 +446,7 @@ public class AnalizadorSintactico {
             case lee:       if(LEE(ejecutar)){
                                 //ñlksjdflñkasjdflñkjasdlñkfjañslkdjflñaksjdflñkajsdñflkjasdlñkfjlaskdjf
                                 if(ejecutar)
-                                terminal.PintarTabladatos(tabla,preanalisisprev.linea);
+                                    terminal.PintarTabladatos(tabla,preanalisisprev.linea);
                                 return INS(ejecutar);
                             }else{
                                 return false;
@@ -455,14 +455,14 @@ public class AnalizadorSintactico {
             case escribe:   if(ESCRIBE(ejecutar)){
                                 //ñlksjdflñkasjdflñkjasdlñkfjañslkdjflñaksjdflñkajsdñflkjasdlñkfjlaskdjf
                                 if(ejecutar)
-                                terminal.PintarTabladatos(tabla,preanalisisprev.linea);
+                                    terminal.PintarTabladatos(tabla,preanalisisprev.linea);
                                 return INS(ejecutar);
                             }else{
                                 return false;
                             }
             
             case fin:       //epsilon
-            case sino:      return true;
+            /*case sino: El terminal 'sino' no va en esta parte*/      return true;
             
             default:        espera1=id;
                             espera2=si;
@@ -470,7 +470,7 @@ public class AnalizadorSintactico {
                             espera4=lee;
                             espera5=escribe;
                             espera6=fin;
-                            espera7=sino;
+                            //espera7=sino;
                             return false;
         }
     }
@@ -482,7 +482,7 @@ public class AnalizadorSintactico {
         switch(preanalisis.tipo){
             case id:        if(VARIABLE(variable) && Emparejar(asignacion) && EXPRESION(expresion) && Emparejar(pyc)){
                                 System.out.println(variable.id+"--"+expresion.valor);
-                                //System.out.println(expresion.valor+"--"+expresion.tipodato);
+                                //System.out.println(expresion.valor+"--"+expresion.tipodato); FALLA DEL 
                                 if(variable.existe){
                                     if(expresion.tipodato==variable.tipodato){
                                             if(variable.tipodato){
@@ -555,7 +555,7 @@ public class AnalizadorSintactico {
                                 return false;
                             }
             
-            case parenteC:
+            //case parenteC: NO PERTENECE
             case asignacion:return true;
                         
             default:        espera1=corcheteA;
@@ -747,7 +747,7 @@ public class AnalizadorSintactico {
                             var.hayi=false;
                             return Emparejar(punto) && Emparejar(length);
             
-            case parenteC:
+            case parenteC: 
             case corcheteC:
             case igual:
             case diferente:
@@ -784,10 +784,10 @@ public class AnalizadorSintactico {
     public boolean P(Datos ope){
         switch(preanalisis.tipo){
             case suma:      ope.op=suma;
-                            return Emparejar(suma); //suma=0
+                            return Emparejar(suma);
             
             case resta:     ope.op=resta;
-                            return Emparejar(resta); //resta=1
+                            return Emparejar(resta);
                         
             default:        espera1=suma;
                             espera2=resta;
@@ -828,12 +828,6 @@ public class AnalizadorSintactico {
                                     switch(v2.op){
                                         case igual:
                                             if(v1.valor==v2.valor)
-//                                                if( INS( true && ejecutar ) ){
-//                                                    return SINO (v3,false);
-//                                                }
-//                                                else{
-//                                                    return false;
-//                                                }
                                                 return INS(true && ejecutar) && SINO(v3,false);
                                             else
                                                 return INS(false) && SINO(v3,true && ejecutar);
@@ -948,36 +942,32 @@ public class AnalizadorSintactico {
         Token aux,aux1;
         
         
-        switch(preanalisis.tipo){//INTEGER es para cuando se le pasa un id o un entero, y Entero  es solamente cuando afuerza es un entero
+        switch(preanalisis.tipo){
             case para:      if(Emparejar(para) && VARIABLE(variable) && Emparejar(asignacion) && INTEGER(lim1) && Emparejar(hasta) && INTEGER(lim2) && Emparejar(paso) && P(salto) && Entero(salto) && Emparejar(hacer)){
                                 empieza=analizadorl.indice;
                                 //asignacion del valor inicial
                                 aux=preanalisis;
                                 aux1=preanalisisprev;
-                                
-                               if(!variable.existe){
-                                    tabla.setValorInt(variable.id,lim1.valor,ejecutar);
-                               }
-                               else{
-                                    if(variable.tipodato){
-                                            b=(variable.hayi)? 
-                                                    (tabla.setValorInt(variable.id,variable.indice,lim1.valor,ejecutar)) 
-                                                    : (tabla.setValorInt(variable.id, lim1.valor,ejecutar)) ;
-                                            if(!b){
-                                                espera11=preanalisisprev.linea;
-                                                return false;
-                                            }
-                                    }else{
-                                        espera11=preanalisisprev.linea;
-                                        tabla.Error="El elemento con id \" "+variable.id+" \" usada en el para debe ser tipo entera";
-                                        return false;
-                                    }
-                               }
+                                                                    if(variable.existe){
+                                                                        if(variable.tipodato){
+                                                                                b=(variable.hayi)? (tabla.setValorInt(variable.id,variable.indice,lim1.valor,ejecutar)) : (tabla.setValorInt(variable.id, lim1.valor,ejecutar)) ;
+                                                                                if(!b){
+                                                                                    espera11=preanalisisprev.linea;
+                                                                                    return false;
+                                                                                }
+                                                                        }else{
+                                                                            espera11=preanalisisprev.linea;
+                                                                            tabla.Error="El elemento con id \" "+variable.id+" \" usada en el para debe ser tipo entera";
+                                                                            return false;
+                                                                        }
+                                                                    }else{
+                                                                            tabla.setValorInt(variable.id,lim1.valor,ejecutar);
+
+                                                                    }
                                 
                                 if(ejecutar){
                                     tabla.getValorInt(variable.id);
                                     //System.out.println("indice token "+preanalisis.imprimir());
-                                    
                                     while(tabla.ss<=lim2.valor){
                                         System.out.println("vuelta "+tabla.ss+" saltos "+salto.valor);
                                         analizadorl.indice=empieza;
@@ -986,27 +976,14 @@ public class AnalizadorSintactico {
                                         b=INS(ejecutar);
                                         if(!b)
                                             return false;
-                                        //b=(variable.hayi)? (tabla.getValoInt(variable.id,variable.indice)) : (tabla.getValorInt(variable.id)) ;
-                                        b=(variable.hayi)? 
-                                                //Si no hay indice lo inserta con variable.indice
-                                                (tabla.setValorInt(variable.id,variable.indice,(tabla.ss-(
-                                                                    (salto.op==suma)?  //op==0 suma
-                                                                        -(salto.valor) 
-                                                                        : (salto.valor) 
-                                                                    )),ejecutar)) //op==1 resta
-                                                //Si si hay indice nomás actualiza los valores
-                                                : (tabla.setValorInt(variable.id,(tabla.ss-(
-                                                                    (salto.op==suma)? 
-                                                                        -(salto.valor) 
-                                                                        : (salto.valor)
-                                                                    )),ejecutar)) ;
+                                        b=(variable.hayi)? (tabla.getValoInt(variable.id,variable.indice)) : (tabla.getValorInt(variable.id)) ;
+                                        b=(variable.hayi)? (tabla.setValorInt(variable.id,variable.indice,(tabla.ss+((salto.op==suma)? (salto.valor) : (-salto.valor))),ejecutar)) : (tabla.setValorInt(variable.id,(tabla.ss+((salto.op==suma)? (salto.valor) : (-salto.valor))),ejecutar)) ;
                                         if(!b){
                                             espera11=preanalisisprev.linea;
                                             return false;
                                         }
-                                        b=(variable.hayi)? 
-                                                (tabla.getValoInt(variable.id,variable.indice)) 
-                                                : (tabla.getValorInt(variable.id)) ;
+                                        b=(variable.hayi)? (tabla.getValoInt(variable.id,variable.indice)) : (tabla.getValorInt(variable.id)) ;
+                                        
                                     }
                                     return Emparejar(fin);
                                 }else{
