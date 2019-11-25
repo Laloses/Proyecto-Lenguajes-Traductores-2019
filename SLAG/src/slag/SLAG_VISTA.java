@@ -103,6 +103,7 @@ public class SLAG_VISTA extends javax.swing.JFrame{
         jTextPane1.setMaximumSize(new java.awt.Dimension(600, 2147483647));
         jScrollPane2.setViewportView(jTextPane1);
 
+        jTextPane2.setEditable(false);
         jTextPane2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jTextPane2.setMaximumSize(new java.awt.Dimension(600, 2147483647));
         jScrollPane1.setViewportView(jTextPane2);
@@ -117,7 +118,7 @@ public class SLAG_VISTA extends javax.swing.JFrame{
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 752, Short.MAX_VALUE)
+            .addGap(0, 798, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -192,27 +193,26 @@ public class SLAG_VISTA extends javax.swing.JFrame{
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 468, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(Pausa)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 486, Short.MAX_VALUE)
                     .addComponent(jScrollPane2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 752, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Pausa))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 443, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(Pausa)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 466, Short.MAX_VALUE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -428,10 +428,12 @@ public class SLAG_VISTA extends javax.swing.JFrame{
         }
         
         try{
-            t.sleep(1500);            //TimeUnit.SECONDS.sleep(1);
+            t.sleep(1500); //TimeUnit.SECONDS.sleep(1);
+                     
         }catch(Exception e){}    
     }
-    
+
+
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
         jTextPane1.setText("");
@@ -476,7 +478,7 @@ public class SLAG_VISTA extends javax.swing.JFrame{
         this.Pausa.setVisible(false);
     }
     public void somemethod() throws IOException, FileNotFoundException, BadLocationException, InterruptedException{
-        t =new Thread(analizadorSin);
+        t = new Thread(analizadorSin);
         t.start();
         jTextPane2.setText("SLAG:\n"+"Se termino la ejecución");
     }
@@ -489,11 +491,11 @@ public class SLAG_VISTA extends javax.swing.JFrame{
           analizador.SetArchivoAnalizar(patharchivo);
           try{
             somemethod();
-            //t.stop();
+            //t.wait(1000);
             if(analizadorSin.valAnalisis){
               //jTextPane2.setText("SLAG: \n Tokens :\n"+analizador.ImprimirListaTokens()+"\n"+analizadorSin.getError());
               jTextPane2.setText("SLAG:\n"+"Analisis Exitoso");
-              //JOptionPane.showMessageDialog(null,"Analisis Exitoso");
+              JOptionPane.showMessageDialog(null,"Analisis Exitoso");
             }else{
               //JOptionPane.showMessageDialog(null,"ERROR");
               jTextPane2.setText("SLAG: \n"+analizadorSin.getError());
@@ -578,27 +580,20 @@ public class SLAG_VISTA extends javax.swing.JFrame{
     }//GEN-LAST:event_jMenu2ActionPerformed
 
     public int getSegundos(){
-//        int _seg=seg;
-//        if(seg==1){
-//            //jLabel2.setText("pausado");
-//        }else{
-//            //jLabel2.setText("ejecutando");
-//        }
-////        seg=0;
         return seg;
     }
 
     private void PausaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PausaActionPerformed
         if(pausa){
             Pausa.setText("Pausa");
-            jTextPane2.setText("SLAG:\n"+"Ejecutando");
+            jTextPane2.setText("SLAG:\n"+"Ejecutando\n");
             pausa=false;
             seg=0;
         }
         else{
             pausa=true;
             Pausa.setText("Continuar");
-            jTextPane2.setText("SLAG:\n"+"Pausado");
+            jTextPane2.setText("SLAG:\n"+"Pausado\n");
             seg=1;
         }
     }//GEN-LAST:event_PausaActionPerformed

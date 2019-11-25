@@ -12,7 +12,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
 
 /**
@@ -104,7 +103,6 @@ public class AnalizadorSintactico implements Runnable{
     public void run(){
         try {
             ComprobarArchivo();
-            Thread.currentThread().interrupt();
         } catch (IOException ex) {
             Logger.getLogger(AnalizadorSintactico.class.getName()).log(Level.SEVERE, null, ex);
         } catch (BadLocationException ex) {
@@ -118,11 +116,8 @@ public class AnalizadorSintactico implements Runnable{
         if(terminal.pausa){
             segundos=terminal.getSegundos();
             TimeUnit.SECONDS.sleep(segundos);
+            pausar();
         }
-        else{
-            return;
-        }
-        pausar();
     }
 
     public void ComprobarArchivo()throws FileNotFoundException, IOException, BadLocationException, InterruptedException{
@@ -131,7 +126,7 @@ public class AnalizadorSintactico implements Runnable{
             analizadorl.ResetListaToken();
             preanalisis=analizadorl.GetToken();
             InicialisarError();
-            terminal.ActualizarTerminal("SLAG:");
+            terminal.ActualizarTerminal("SLAG:\n");
             System.out.println("analisis sintactico iniciado");
             tabla.a.clear();
             b=S();
@@ -177,20 +172,28 @@ public class AnalizadorSintactico implements Runnable{
     }
     
     public boolean S() throws BadLocationException, InterruptedException{
-    switch(preanalisis.tipo){
-    case programa:if(Emparejar(programa) && Emparejar(id) && DC() && DA() && Emparejar(inicio) && INS(true) && Emparejar(fin) && Emparejar(finarchivo)){
-                        GenerarError();
-                        return true;
-                    }   else{
-                            
-                        GenerarError();
-                        return false;
-                    }
-            
-    default:    espera1=programa;
-                GenerarError();
-                return false;
-    }
+        switch(preanalisis.tipo){
+        case programa:
+                    if(Emparejar(programa) && 
+                        Emparejar(id) && 
+                        DC() && 
+                        DA() && 
+                        Emparejar(inicio) && 
+                        INS(true) && 
+                        Emparejar(fin) && 
+                        Emparejar(finarchivo)){
+                            GenerarError();
+                            return true;
+                        }   else{
+
+                            GenerarError();
+                            return false;
+                        }
+
+        default:    espera1=programa;
+                    GenerarError();
+                    return false;
+        }
     }
    
     public boolean DC(){
